@@ -17,16 +17,16 @@
     --border-2: #d3ccc0;
     --text: #1f1d1a;
     --text-dim: #5f5a52;
-    --text-faint: #8a847a;
+    --text-faint: #6e6860;
     --rust: #c2542d;
-    --ochre: #b7791f;
+    --ochre: #8a5a12;
     --signal: #2f6fa8;
     --signal-2: #b9cfe6;
     --signal-bg: #eef3fa;
-    --ok: #2f9e5f;
+    --ok: #1f7a47;
     --ok-bg: #e9f6ee;
     --ok-line: #bfe3cc;
-    --warn: #b7791f;
+    --warn: #8a5a12;
     --warn-bg: #fdf3e0;
     --warn-line: #efdcb5;
     --bad: #c43c2d;
@@ -701,6 +701,29 @@
   .md table { border-collapse: collapse; font-size: 13.5px; margin: 0 0 10px; }
   .md td, .md th { border: 1px solid var(--border); padding: 4px 8px; }
   .md hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  /* --- trial fixes --- */
+  #map-col > .panel:first-child { position: relative; }
+  #nomission { display: none; position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%);
+    width: min(540px, 86%); padding: 20px 24px; border-radius: 12px; font-size: 16px; line-height: 1.5;
+    background: var(--panel); border: 1px solid var(--border-2); color: var(--text); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+  #nomission b { font-size: 22px; display: block; margin-bottom: 6px; }
+  #nomission ol { margin: 8px 0 10px; padding-left: 22px; }
+  #nomission li { margin: 6px 0; }
+  #nomission code { font-family: var(--font-mono); font-size: 14px; background: var(--inset); padding: 2px 6px; border-radius: 5px; white-space: nowrap; }
+  #nomission span { color: var(--text-dim); font-size: 14px; }
+  body.no-mission #nomission { display: block; }
+  body.no-mission #timeline { visibility: hidden; }
+  #phase-pill.nomission { color: var(--text-dim); border-color: var(--border-2); background: var(--inset); }
+  #live-indicator.offline { color: var(--bad); border-color: var(--bad); }
+  #live-indicator.offline .dot { background: var(--bad); }
+  #orient { white-space: normal; }
+  #orient .txt { overflow: visible; }
+  .card .lu-col { min-width: 0; flex: 1 1 auto; }
+  .card .lu-st { font-size: 12px; line-height: 1.2; color: var(--text-dim); white-space: nowrap; }
+  .card.running .lu-st, .card.waiting .lu-st { color: var(--ok); font-weight: 650; }
+  .card.waiting .lu-st { color: var(--warn); }
+  .card.idle .ring, .card.idle .lu-name { opacity: 1; }
 </style>
 
 <header id="topbar">
@@ -736,7 +759,7 @@
 
 <div id="orient">
   <span class="lead" title="dotted words have definitions — hover them">What you are looking at</span>
-  <span class="txt">A Mars rescue run by <span class="term" data-term="claude-code">Claude Code</span>: three colonists, one <span class="term" data-term="objective">objective</span> at a time. Five roles, each its own <span class="term" data-term="subagent">subagent</span> with its own <span class="term" data-term="tool">tools</span>; the feed groups every tool call they make; a red <b>BLOCKED</b> row is a <span class="term" data-term="hook">hook</span> refusing one; an amber <span class="term" data-term="decision">decision</span> row is a human answering the <span class="term" data-term="sitrep">sitrep</span>. A <span class="term" data-term="sol">sol</span> is one round of orders.</span>
+  <span class="txt"><span class="term" data-term="claude-code">Claude Code</span> is running a Mars rescue. Each of the five roles is a separate AI worker (a <span class="term" data-term="subagent">subagent</span>) with its own tools. A red <b>BLOCKED</b> row is a <span class="term" data-term="hook">hook</span> refusing an action. A <span class="term" data-term="sol">sol</span> is one round of orders.</span>
   <button class="x" id="orient-x" title="dismiss">&times;</button>
 </div>
 <div id="phint"><span class="lead">Point at</span><span class="txt" id="phint-text"></span><span class="keys" id="phint-keys"></span></div>
@@ -748,6 +771,10 @@
       <div id="map-col">
         <div class="panel">
           <canvas id="map" width="792" height="634"></canvas>
+          <div id="nomission"><b>No mission yet</b>
+            <ol><li>In a terminal, in this folder: <code>python scripts/prepare_demo.py --seed 42</code></li>
+            <li>Start <code>claude</code> and type: <code>Mission Control, run the next sol</code></li></ol>
+            <span>This page updates by itself once the mission exists.</span></div>
           <div id="legend"></div>
         </div>
         <div class="panel" id="timeline">
@@ -774,12 +801,12 @@
         </div>
 
         <div class="panel" id="sitrep-panel">
-          <h2>Waiting for orders<span class="rule"></span><span class="sub">a colonist is aboard — the engine refuses every move until the officer on duty answers</span></h2>
+          <h2>Waiting for orders<span class="rule"></span><span class="sub">a colonist is aboard — the engine refuses every move until you, the officer on duty, answer</span></h2>
           <div class="term-screen">
             <div class="term-head"><span class="dotlamp"></span>MISSION COMPUTER &middot; SITREP</div>
             <pre class="term-body" id="sitrep-body">CONNECTING…<span class="term-cursor"></span></pre>
           </div>
-          <div id="sitrep-caption">Waiting for the officer on duty — answer in the terminal.</div>
+          <div id="sitrep-caption">Your turn. Claude Code is asking this in the terminal where you typed <b>claude</b>: choose 1, 2 or 3 there. This panel only shows the question.</div>
         </div>
 
         <div class="panel" id="feed-panel">
@@ -908,9 +935,9 @@
      column of the comparison grid and the author of every decision row. */
   var HUMAN_ROLE = "human";
   var ROLE_COLOR = {
-    rover: "#1d8f8e", engineer: "#c9662f", "life-support": "#2f9e5f",
-    navigator: "#b58a1c", "mission-log": "#b0568a", "mission-control": "#4f6fd8",
-    human: "#b7791f"
+    rover: "#17706f", engineer: "#a8501f", "life-support": "#1f7a47",
+    navigator: "#8a6a10", "mission-log": "#9c4577", "mission-control": "#3f5fc8",
+    human: "#8a5a12"
   };
   var ROLE_TITLE = {
     rover: "Rover", engineer: "Engineer", "life-support": "Life Support",
@@ -1198,7 +1225,8 @@
   }
 
   function pollOnce() {
-    fetchJSON("/api/state").then(function (d) { liveState = d; render(); }).catch(function () {});
+    fetchJSON("/api/state").then(function (d) { pollFails = 0; liveState = d; render(); setLivePill(); })
+      .catch(function () { pollFails++; setLivePill(); });
     fetchJSON("/api/events?since=" + nextSince).then(function (d) {
       if (d && d.events && d.events.length) {
         allEvents = allEvents.concat(d.events);
@@ -1587,17 +1615,19 @@
 
   function renderHeader(state) {
     if (!state) return;
-    $("sol-value").textContent = (state.sol !== undefined && state.sol !== null) ? state.sol : "–";
+    var missing = !!state.missing;
+    document.body.classList.toggle("no-mission", missing);
+    $("sol-value").textContent = (!missing && state.sol !== undefined && state.sol !== null) ? state.sol : "–";
 
     /* oxygen belongs to the colonist being worked: there is no clock while the
        team waits for orders, so the engine sends null and the bar reads --/12 */
     var oxy = state.oxygen_sols, oxyMax = state.oxygen_max || 12;
     var noClock = (oxy === undefined || oxy === null);
-    $("oxy-text").textContent = (noClock ? "--" : oxy) + "/" + oxyMax;
+    $("oxy-text").textContent = noClock ? "no clock" : oxy + "/" + oxyMax;
     var pct = (noClock || !oxyMax) ? 0 : Math.max(0, Math.min(100, (oxy / oxyMax) * 100));
     var fill = $("oxy-bar-fill");
     fill.style.width = pct + "%";
-    fill.style.background = pct > 50 ? "var(--ok)" : (pct > 25 ? "var(--warn)" : "var(--bad)");
+    fill.style.background = noClock ? "var(--border-2)" : pct > 50 ? "var(--ok)" : (pct > 25 ? "var(--warn)" : "var(--bad)");
 
     var obj = objectiveOf(state);
     $("rescued-value").textContent = obj.done + "/" + obj.total;
@@ -1606,7 +1636,10 @@
     $("rescued-pips").innerHTML = pips;
 
     var pill = $("phase-pill");
-    if (state.outcome) {
+    if (missing) {
+      pill.className = "nomission";
+      pill.textContent = "No mission yet";
+    } else if (state.outcome) {
       pill.className = "";
       pill.textContent = state.outcome === "aborted" ? "MISSION CLOSED" : "MISSION OVER";
     } else if (isAwaiting(state)) {
@@ -1626,8 +1659,14 @@
     else if (state.outcome === "aborted") { banner.className = "lost"; banner.textContent = "MISSION ABORTED"; }
     else { banner.className = ""; banner.textContent = ""; }
 
+    setLivePill();
+  }
+  var pollFails = 0;
+  function setLivePill() {
     var ind = $("live-indicator");
-    if (viewSol === null) { ind.className = "live"; $("live-text").textContent = "Live"; }
+    if (pollFails >= 3) { ind.className = "offline"; $("live-text").textContent = "No server · retrying"; }
+    else if (liveState && liveState.missing) { ind.className = ""; $("live-text").textContent = "No mission"; }
+    else if (viewSol === null) { ind.className = "live"; $("live-text").textContent = "Live"; }
     else { ind.className = "replay"; $("live-text").textContent = "Replay · sol " + viewSol; }
   }
 
@@ -1844,12 +1883,12 @@
       var cell = coordToCell(coord);
       if (cell.r < 0 || cell.r >= ROWS.length || isNaN(cell.c) || cell.c < 0 || cell.c >= COLS) return;
       var x = MARGIN_LEFT + cell.c * TILE, y = MARGIN_TOP + cell.r * TILE;
-      var cx = x + 20, cy = y + TILE - 20;
+      var cx = x + 16, cy = y + 16;
       ctx.save();
-      ctx.beginPath(); ctx.arc(cx, cy, 15, 0, Math.PI * 2);
+      ctx.beginPath(); ctx.arc(cx, cy, 13, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(233,246,238,0.97)"; ctx.fill();
       ctx.strokeStyle = "#2f9e5f"; ctx.lineWidth = 2; ctx.stroke();
-      drawIcon(ctx, "rescued", cx + 1, cy, 19, "#2f9e5f", 2);
+      drawIcon(ctx, "rescued", cx + 1, cy, 16, "#2f9e5f", 2);
       ctx.restore();
     });
   }
@@ -1959,7 +1998,6 @@
     }
 
     drawSearchZone(zone);
-    drawRescued(rescuedList);
 
     ctx.fillStyle = "#8a847a";
     ctx.font = "600 15px system-ui, sans-serif";
@@ -1973,6 +2011,7 @@
 
     updateAnimTargets(state);
     drawUnits(state);
+    drawRescued(rescuedList);
   }
   function animFrame() { drawMap(); requestAnimationFrame(animFrame); }
 
@@ -2084,7 +2123,13 @@
       return '<div class="' + cls + '" data-lu-index="' + i + '" style="color:' + colour + ';z-index:' + (i + 1) +
         '" title="' + esc(ROLE_TITLE[role]) + '">' +
         '<div class="top"><div class="ring">' + iconSVG(human ? "human" : role, 20, colour) + '</div>' +
-        '<div class="lu-name">' + esc(ROLE_TITLE[role]) + "</div></div>" +
+        '<div class="lu-col"><div class="lu-name">' + esc(ROLE_TITLE[role]) + "</div>" +
+        '<div class="lu-st">' + (human ? (waiting ? "your turn" : "standing by")
+          : (s.running ? "running" : (s.finished ? "reported" : "idle"))) +
+          (role === "rover" ? '<span class="dots">' + UNITS.map(function (u) {
+            var un = (currentState() && currentState().units || {})[u];
+            return '<span class="dot' + (un && un.status === "broken" ? " broken" : (s.units[u] === "run" ? " run" : " done")) + '"></span>';
+          }).join("") + "</span>" : "") + "</div></div></div>" +
         '<div class="belt">' + esc(R.model) + (R.tools.length ? " · " + R.tools.map(esc).join(", ") : "") + "</div>" +
       "</div>";
     }).join("");
@@ -3070,6 +3115,7 @@
     presenter = !!on;
     document.body.classList.toggle("presenter", presenter);
     $("presenter-btn").classList.toggle("on", presenter);
+    applyZoom();
     if (presenter && !$("orient").classList.contains("off")) {
       $("orient").classList.add("off");
       autoHidOrient = true;
@@ -3080,7 +3126,14 @@
     if (!presenter && showTruth) { $("truth-toggle").checked = false; showTruth = false; tileCache = {}; render(); }
     syncSideCol();
   }
+  function applyZoom() {
+    var z = presenter ? Math.max(1, Math.min(window.innerWidth / 1536, window.innerHeight / 864, 1.4)) : 1;
+    document.documentElement.style.zoom = z;
+    if (typeof syncSideCol === "function") setTimeout(syncSideCol, 0);
+  }
+  window.addEventListener("resize", applyZoom);
   $("presenter-btn").addEventListener("click", function () { setPresenter(!presenter); });
+  if (location.hash === "#presenter") setTimeout(function () { setPresenter(true); }, 0);
   $("orient-x").addEventListener("click", function () {
     $("orient").classList.add("off");
     autoHidOrient = false;

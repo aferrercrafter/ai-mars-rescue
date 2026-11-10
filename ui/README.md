@@ -34,6 +34,11 @@ python ui/server.py
 
 Defaults to `--port 8765 --root game`. Then open http://localhost:8765.
 
+The server listens on this machine only (`--host 127.0.0.1`). The page can show
+the hidden map, so pass `--host 0.0.0.0` only when you mean to open it to the
+network. On a projector, press `F11` and then `P`: presenter mode scales the
+page to fill the screen.
+
 Against the bundled fixtures — no mission, no engine, no hooks required:
 
 ```

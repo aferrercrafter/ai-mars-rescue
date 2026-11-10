@@ -103,7 +103,8 @@ def main():
         command = tool_input.get("command")
         if not blocked and command:
             normalized_command = str(command).replace("\\", "/")
-            if "truth.json" in normalized_command:
+            # the display server (ui/server.py) serves the same file at /api/truth
+            if "truth.json" in normalized_command or "api/truth" in normalized_command:
                 blocked = True
 
         if blocked:

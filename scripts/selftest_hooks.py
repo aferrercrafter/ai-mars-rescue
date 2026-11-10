@@ -131,6 +131,13 @@ def test_protect_truth():
         )
         record("protect_truth: Bash type game/truth.json", 2, r.returncode, r.returncode == 2)
 
+        r = run_hook(
+            "protect_truth.py",
+            {"tool_name": "Bash", "tool_input": {"command": "curl -s http://localhost:8765/api/truth"}},
+            tmp,
+        )
+        record("protect_truth: Bash curl the display's /api/truth", 2, r.returncode, r.returncode == 2)
+
         r = run_hook("protect_truth.py", None, tmp, raw_stdin="")
         record("protect_truth: empty stdin", 0, r.returncode, r.returncode == 0)
     finally:

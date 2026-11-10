@@ -631,6 +631,9 @@ def run(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Mars Search & Rescue UI server")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--root", default="game", help="directory containing team.json etc.")
+    parser.add_argument("--host", default="127.0.0.1",
+                        help="address to listen on (default 127.0.0.1, this machine only; the page can "
+                             "show the hidden map, so open it to a network deliberately)")
     parser.add_argument("--index", default=None,
                         help="HTML page to serve at / (default ui/index.html; ui/light/index.html is the light theme)")
     args = parser.parse_args(argv)
@@ -639,7 +642,7 @@ def run(argv=None) -> int:
     if args.index:
         INDEX_HTML = Path(args.index)
 
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), Handler)
+    server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(
         f"Mars Search & Rescue UI: http://localhost:{args.port}"
         f"  (mission root={ROOT}, harness={PROJECT_DIR})",
