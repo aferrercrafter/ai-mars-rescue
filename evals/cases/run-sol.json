@@ -1,0 +1,96 @@
+{
+  "skill_name": "run-sol",
+  "agent": null,
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-sol",
+      "fixture": "demo",
+      "prompt": "Mission Control, run the next sol",
+      "expected_output": "Orders for the working rover, a note and an engineer for the broken one, the wave, the navigator, a resolve, and a dispatch.",
+      "assertions": [
+        {
+          "text": "Every check in scripts/check_sol.py",
+          "check": "check_sol",
+          "args": {
+            "sol": 3
+          }
+        },
+        {
+          "text": "Orders for rover-1 are on file for sol 3",
+          "check": "orders_written",
+          "args": {
+            "sol": 3,
+            "unit": "rover-1"
+          }
+        },
+        {
+          "text": "The engineer is spawned once, because rover-2 is broken",
+          "check": "agents_spawned",
+          "args": {
+            "agent": "engineer",
+            "count": 1
+          }
+        },
+        {
+          "text": "The main session never runs `act`",
+          "check": "main_session_never_ran",
+          "args": {
+            "pattern": "^act "
+          }
+        },
+        {
+          "text": "The main session never runs `init`",
+          "check": "main_session_never_ran",
+          "args": {
+            "pattern": "^init"
+          }
+        },
+        {
+          "text": "The sol is resolved",
+          "check": "sol_resolved",
+          "args": {}
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "colonist-already-rescued",
+      "fixture": "awaiting_orders",
+      "prompt": "Mission Control, run the next sol",
+      "expected_output": "The mission is waiting for the human. With no way to ask in a headless run, the session shows the sitrep with the three choices and stops without choosing.",
+      "assertions": [
+        {
+          "text": "The mission is still waiting for orders",
+          "check": "phase_is",
+          "args": {
+            "phase": "awaiting-orders"
+          }
+        },
+        {
+          "text": "The session never chooses continue, rest or abort",
+          "check": "main_session_never_ran",
+          "args": {
+            "pattern": "^(continue-mission|rest|abort-mission)"
+          }
+        },
+        {
+          "text": "No agent is spawned",
+          "check": "no_agents_spawned",
+          "args": {}
+        },
+        {
+          "text": "The answer shows the three choices",
+          "check": "answer_contains",
+          "args": {
+            "words": [
+              "continue",
+              "rest",
+              "abort"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

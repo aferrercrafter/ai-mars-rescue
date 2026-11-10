@@ -1,0 +1,66 @@
+[
+  {
+    "query": "Mission Control, run the next sol",
+    "should_trigger": true
+  },
+  {
+    "query": "run sol 4",
+    "should_trigger": true
+  },
+  {
+    "query": "ok next round please, same plan as before",
+    "should_trigger": true
+  },
+  {
+    "query": "advance the mission by one day",
+    "should_trigger": true
+  },
+  {
+    "query": "the display is up on the projector - go ahead and play a sol so the class can watch the feed",
+    "should_trigger": true
+  },
+  {
+    "query": "rover-2 is still stuck at B4. take the next turn and get it repaired",
+    "should_trigger": true
+  },
+  {
+    "query": "let's keep going, do another sol",
+    "should_trigger": true
+  },
+  {
+    "query": "we have 10 oxygen left, send the rovers out again and resolve the day",
+    "should_trigger": true
+  },
+  {
+    "query": "explain what the run-sol skill does step by step, don't run anything",
+    "should_trigger": false
+  },
+  {
+    "query": "run the unit tests and the hook selftest",
+    "should_trigger": false
+  },
+  {
+    "query": "where are the rovers right now? just show me the map",
+    "should_trigger": false
+  },
+  {
+    "query": "why did rover-2 break down last sol?",
+    "should_trigger": false
+  },
+  {
+    "query": "reset the mission and build a fresh demo with seed 7",
+    "should_trigger": false
+  },
+  {
+    "query": "add a test to tests/test_engine.py that a second conserve in a row is rejected",
+    "should_trigger": false
+  },
+  {
+    "query": "how many sols of oxygen does the colonist have left?",
+    "should_trigger": false
+  },
+  {
+    "query": "in engine/engine.py, what does the resolve command do to oxygen? read the code and summarise",
+    "should_trigger": false
+  }
+]

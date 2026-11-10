@@ -1,0 +1,117 @@
+{
+  "skill_name": "life-support",
+  "agent": "life-support",
+  "evals": [
+    {
+      "id": 1,
+      "name": "plenty-of-oxygen",
+      "fixture": "demo",
+      "prompt": "Set the oxygen mode for this sol.",
+      "expected_output": "Oxygen is 10, so the mode is normal.",
+      "assertions": [
+        {
+          "text": "Ledger says normal for the current sol and the engine accepted it",
+          "check": "ledger_mode",
+          "args": {
+            "mode": "normal"
+          }
+        },
+        {
+          "text": "Ledger keeps the exact four-line format",
+          "check": "ledger_format",
+          "args": {}
+        },
+        {
+          "text": "The first save was accepted (one edit, no LEDGER REJECTED)",
+          "check": "first_write_accepted",
+          "args": {
+            "agent": "life-support",
+            "suffix": "oxygen-ledger.md",
+            "prefix": "LEDGER REJECTED"
+          }
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "life-support"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "low-oxygen-conserve",
+      "fixture": "oxygen_low_after_normal",
+      "prompt": "Set the oxygen mode for this sol.",
+      "expected_output": "Oxygen is 3 and last sol was normal, so the mode is conserve.",
+      "assertions": [
+        {
+          "text": "Ledger says conserve for the current sol and the engine accepted it",
+          "check": "ledger_mode",
+          "args": {
+            "mode": "conserve"
+          }
+        },
+        {
+          "text": "Ledger keeps the exact four-line format",
+          "check": "ledger_format",
+          "args": {}
+        },
+        {
+          "text": "The first save was accepted (one edit, no LEDGER REJECTED)",
+          "check": "first_write_accepted",
+          "args": {
+            "agent": "life-support",
+            "suffix": "oxygen-ledger.md",
+            "prefix": "LEDGER REJECTED"
+          }
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "life-support"
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "low-oxygen-after-conserve",
+      "fixture": "oxygen_low_after_conserve",
+      "prompt": "Set the oxygen mode for this sol.",
+      "expected_output": "Oxygen is 3 but last sol was conserve, so the mode is normal, without first trying conserve and being rejected.",
+      "assertions": [
+        {
+          "text": "Ledger says normal for the current sol and the engine accepted it",
+          "check": "ledger_mode",
+          "args": {
+            "mode": "normal"
+          }
+        },
+        {
+          "text": "Ledger keeps the exact four-line format",
+          "check": "ledger_format",
+          "args": {}
+        },
+        {
+          "text": "The first save was accepted (one edit, no LEDGER REJECTED)",
+          "check": "first_write_accepted",
+          "args": {
+            "agent": "life-support",
+            "suffix": "oxygen-ledger.md",
+            "prefix": "LEDGER REJECTED"
+          }
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "life-support"
+          }
+        }
+      ]
+    }
+  ]
+}

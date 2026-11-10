@@ -1,0 +1,200 @@
+{
+  "skill_name": "rover-ops",
+  "agent": "rover",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ordered-move-and-scan",
+      "fixture": "demo",
+      "prompt": "You are rover-1. Orders: head for A6 and scan.",
+      "expected_output": "rover-1 checks itself, moves to A6, scans once, notes Mission Control about the colonist the scan shows on another tile, and reports one line.",
+      "assertions": [
+        {
+          "text": "First engine command is `unit rover-1`",
+          "check": "first_command_is",
+          "args": {
+            "agent": "rover",
+            "command": "unit rover-1"
+          }
+        },
+        {
+          "text": "Exactly one move",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-1",
+            "action": "move",
+            "count": 1
+          }
+        },
+        {
+          "text": "Exactly one scan",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-1",
+            "action": "scan",
+            "count": 1
+          }
+        },
+        {
+          "text": "rover-1 ends on A6",
+          "check": "unit_at",
+          "args": {
+            "unit": "rover-1",
+            "coord": "A6"
+          }
+        },
+        {
+          "text": "Never acts for the other rover",
+          "check": "acts_only_for",
+          "args": {
+            "unit": "rover-1"
+          }
+        },
+        {
+          "text": "No tool call was denied (commands were not chained or prefixed with cd)",
+          "check": "no_permission_denials",
+          "args": {}
+        },
+        {
+          "text": "Notes Mission Control about the colonist seen on another tile",
+          "check": "note_sent",
+          "args": {
+            "sender": "rover-1",
+            "to": "mission-control"
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "rover",
+            "prefix": "rover-1"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "broken-rover-asks-for-repair",
+      "fixture": "demo",
+      "prompt": "You are rover-2. Orders: move toward the search zone and scan.",
+      "expected_output": "rover-2 sees it is broken, does not try to move or scan, sends the engineer a note, and reports one line.",
+      "assertions": [
+        {
+          "text": "Does not try to move",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-2",
+            "action": "move",
+            "count": 0
+          }
+        },
+        {
+          "text": "Does not try to scan",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-2",
+            "action": "scan",
+            "count": 0
+          }
+        },
+        {
+          "text": "Sends a note to the engineer",
+          "check": "note_sent",
+          "args": {
+            "sender": "rover-2",
+            "to": "engineer"
+          }
+        },
+        {
+          "text": "No engine command returned ERROR",
+          "check": "no_engine_errors",
+          "args": {
+            "agent": "rover"
+          }
+        },
+        {
+          "text": "No tool call was denied",
+          "check": "no_permission_denials",
+          "args": {}
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "rover",
+            "prefix": "rover-2"
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "rescue-on-own-tile",
+      "fixture": "colonist_in_reach",
+      "prompt": "You are rover-1. Orders: move to {colonist} and scan.",
+      "expected_output": "rover-1 moves onto the colonist's tile, scans, rescues, and leads its one-line report with the rescue.",
+      "assertions": [
+        {
+          "text": "Colonist is rescued",
+          "check": "colonist_rescued",
+          "args": {}
+        },
+        {
+          "text": "Exactly one rescue",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-1",
+            "action": "rescue",
+            "count": 1
+          }
+        },
+        {
+          "text": "Exactly one move",
+          "check": "act_count",
+          "args": {
+            "unit": "rover-1",
+            "action": "move",
+            "count": 1
+          }
+        },
+        {
+          "text": "Report mentions the rescue",
+          "check": "report_contains",
+          "args": {
+            "agent": "rover",
+            "phrase": "rescue"
+          }
+        },
+        {
+          "text": "No tool call was denied",
+          "check": "no_permission_denials",
+          "args": {}
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "rover",
+            "prefix": "rover-1"
+          }
+        }
+      ]
+    }
+  ]
+}

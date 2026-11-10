@@ -5,7 +5,7 @@ description: Oxygen ledger procedure - choose normal or conserve mode for the so
 
 ## 1. Read state
 
-Read `game/team.json`: `sol`, `oxygen_sols`, and `pending.ledger` (the mode used last sol).
+Read `sol` and `oxygen_sols` in `game/team.json`, then `game/field/oxygen-ledger.md`: until you edit it, its `mode` is the one used last sol.
 
 ## 2. Choose the mode
 

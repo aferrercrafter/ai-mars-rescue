@@ -1,0 +1,91 @@
+{
+  "skill_name": "navigation",
+  "agent": "navigator",
+  "evals": [
+    {
+      "id": 1,
+      "name": "first-lessons",
+      "fixture": "demo",
+      "prompt": "The rover wave for this sol has finished. Record what the terrain taught us.",
+      "expected_output": "One to three short rule-style lessons, each with coordinates and its objective, in both the navigator's memory and game/intel/lessons.md.",
+      "assertions": [
+        {
+          "text": "Writes 1 to 3 lessons to game/intel/lessons.md",
+          "check": "lessons_count",
+          "args": {
+            "low": 1,
+            "high": 3
+          }
+        },
+        {
+          "text": "Every lesson names an evidence coordinate",
+          "check": "lessons_cite_evidence",
+          "args": {}
+        },
+        {
+          "text": "Every lesson names the objective it came from",
+          "check": "lessons_name_objective",
+          "args": {}
+        },
+        {
+          "text": "Every lesson is 40 words or fewer",
+          "check": "lessons_are_short",
+          "args": {
+            "words": 40
+          }
+        },
+        {
+          "text": "The same lessons are in the navigator's memory",
+          "check": "lessons_in_memory",
+          "args": {}
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "navigator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "nothing-new",
+      "fixture": "navigator_known",
+      "prompt": "The rover wave for this sol has finished. Record what the terrain taught us.",
+      "expected_output": "Memory already covers the explored terrain, so nothing is added and the report says 0 new lessons.",
+      "assertions": [
+        {
+          "text": "No bullet is added to lessons.md or to memory",
+          "check": "nothing_duplicated",
+          "args": {}
+        },
+        {
+          "text": "Report says 0 new lessons",
+          "check": "report_contains",
+          "args": {
+            "agent": "navigator",
+            "phrase": "| 0 |"
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "navigator"
+          }
+        }
+      ]
+    }
+  ]
+}

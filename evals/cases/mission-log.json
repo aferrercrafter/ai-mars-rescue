@@ -1,0 +1,153 @@
+{
+  "skill_name": "mission-log",
+  "agent": "mission-log",
+  "evals": [
+    {
+      "id": 1,
+      "name": "sol-with-repair-and-block",
+      "fixture": "log_sol3",
+      "prompt": "Write the dispatch for sol 3.",
+      "expected_output": "A '## Sol 3' section of 60-90 words that names both rovers, the engineer and the blocked life-support action, followed by the events footer.",
+      "assertions": [
+        {
+          "text": "A '## Sol 3' section exists",
+          "check": "dispatch_written",
+          "args": {
+            "sol": 3
+          }
+        },
+        {
+          "text": "The dispatch is 60 to 90 words",
+          "check": "dispatch_words",
+          "args": {
+            "sol": 3,
+            "low": 60,
+            "high": 90
+          }
+        },
+        {
+          "text": "The section ends with an events footer that covers the whole log",
+          "check": "dispatch_footer",
+          "args": {
+            "sol": 3
+          }
+        },
+        {
+          "text": "Names rover-1, rover-2 and the engineer",
+          "check": "dispatch_mentions",
+          "args": {
+            "sol": 3,
+            "words": [
+              "rover-1",
+              "rover-2",
+              "engineer"
+            ]
+          }
+        },
+        {
+          "text": "Names the BLOCKED life-support action",
+          "check": "dispatch_mentions",
+          "args": {
+            "sol": 3,
+            "words": [
+              "block",
+              "life"
+            ]
+          }
+        },
+        {
+          "text": "Everything already in dispatches.md is kept",
+          "check": "earlier_dispatches_kept",
+          "args": {}
+        },
+        {
+          "text": "The word count in the report is true (within 3)",
+          "check": "report_word_count_true",
+          "args": {
+            "sol": 3
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "mission-log"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "second-dispatch-keeps-first",
+      "fixture": "log_sol4",
+      "prompt": "Write the dispatch for sol 4.",
+      "expected_output": "A '## Sol 4' section of 60-90 words appended after the untouched Sol 3 section, covering only sol 4's events.",
+      "assertions": [
+        {
+          "text": "A '## Sol 4' section exists",
+          "check": "dispatch_written",
+          "args": {
+            "sol": 4
+          }
+        },
+        {
+          "text": "The dispatch is 60 to 90 words",
+          "check": "dispatch_words",
+          "args": {
+            "sol": 4,
+            "low": 60,
+            "high": 90
+          }
+        },
+        {
+          "text": "The section ends with an events footer that covers the whole log",
+          "check": "dispatch_footer",
+          "args": {
+            "sol": 4
+          }
+        },
+        {
+          "text": "Names both rovers and the tile rover-1 entered",
+          "check": "dispatch_mentions",
+          "args": {
+            "sol": 4,
+            "words": [
+              "rover-1",
+              "rover-2",
+              "{entered}"
+            ]
+          }
+        },
+        {
+          "text": "The Sol 3 section is kept unchanged",
+          "check": "earlier_dispatches_kept",
+          "args": {}
+        },
+        {
+          "text": "The word count in the report is true (within 3)",
+          "check": "report_word_count_true",
+          "args": {
+            "sol": 4
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "mission-log"
+          }
+        }
+      ]
+    }
+  ]
+}

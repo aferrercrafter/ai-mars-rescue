@@ -10,3 +10,5 @@ __pycache__/
 .claude/worktrees/
 .claude/scheduled_tasks.lock
 .venv/
+# raw eval output (regenerate with evals/run_evals.py)
+evals/results/

@@ -70,7 +70,8 @@ CLAUDE.md            project memory for the main session
   skills/            six skills, each with SKILL.md (for Claude) and README.md (for you)
 hooks/               the hook scripts
 engine/engine.py     mission rules and state; the only thing that changes the game
-scripts/             prepare_demo.py, reset.py, selftest_hooks.py
+scripts/             prepare_demo.py, reset.py, selftest_hooks.py, check_sol.py
+evals/               skill evals: each skill measured with and without itself
 tests/               engine tests
 ui/                  mission display (server.py + two single-file pages)
 vanilla/             the same game without the harness
@@ -92,6 +93,8 @@ python scripts/check_sol.py 3       # the sol number you just ran
 ```
 
 It reads `game/` and checks that both rovers acted, reports follow the one-line format, no hook blocked anything, the ledger and lessons were written, and the dispatch is 60 to 90 words.
+
+To measure what each skill adds, by running its agent with and without it, see [evals/README.md](evals/README.md). The last results are in [evals/RESULTS.md](evals/RESULTS.md).
 
 ## Contributing
 

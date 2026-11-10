@@ -1,0 +1,84 @@
+{
+  "skill_name": "field-works",
+  "agent": "engineer",
+  "evals": [
+    {
+      "id": 1,
+      "name": "broken-rover-gets-repair",
+      "fixture": "demo",
+      "prompt": "A rover is reported broken. File the repairs that are needed.",
+      "expected_output": "One valid game/field/repair-rover-2.json, accepted on the first write, and a one-line report.",
+      "assertions": [
+        {
+          "text": "repair-rover-2.json has exactly the four keys, with the current sol",
+          "check": "repair_file_valid",
+          "args": {
+            "unit": "rover-2"
+          }
+        },
+        {
+          "text": "The first repair file written was accepted (one write, no FIELD REJECTED)",
+          "check": "first_write_accepted",
+          "args": {
+            "agent": "engineer",
+            "suffix": "repair-rover-2.json",
+            "prefix": "FIELD REJECTED"
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "engineer"
+          }
+        },
+        {
+          "text": "After resolve, rover-2 is no longer broken",
+          "check": "resolve_frees",
+          "args": {
+            "unit": "rover-2"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-broken-rover",
+      "fixture": "fresh",
+      "prompt": "Check the rovers and file any repairs that are needed.",
+      "expected_output": "No repair file, and a one-line report saying no repairs were needed.",
+      "assertions": [
+        {
+          "text": "No repair file is written",
+          "check": "no_repair_files",
+          "args": {}
+        },
+        {
+          "text": "Report says 'no repairs needed'",
+          "check": "report_contains",
+          "args": {
+            "agent": "engineer",
+            "phrase": "no repairs needed"
+          }
+        },
+        {
+          "text": "No hook blocked or rejected anything",
+          "check": "no_blocked",
+          "args": {}
+        },
+        {
+          "text": "Final message is one line with four ' | ' fields, starting with its own name",
+          "check": "report_one_line",
+          "args": {
+            "agent": "engineer"
+          }
+        }
+      ]
+    }
+  ]
+}
