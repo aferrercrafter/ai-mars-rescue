@@ -1,0 +1,390 @@
+{
+  "schema": 3,
+  "seed": 42,
+  "sol": 2,
+  "outcome": null,
+  "outcome_settled": false,
+  "phase": "active",
+  "oxygen_sols": 11,
+  "oxygen_max": 12,
+  "base": "A1",
+  "current_objective": 1,
+  "objectives": [
+    {
+      "id": 1,
+      "zone": [
+        "D5",
+        "D6",
+        "D7",
+        "E5",
+        "E6",
+        "E7",
+        "F5",
+        "F6",
+        "F7"
+      ],
+      "astronaut_at": "E6",
+      "status": "open"
+    },
+    {
+      "id": 2,
+      "zone": [
+        "E8",
+        "E9",
+        "E10",
+        "F8",
+        "F9",
+        "F10",
+        "G8",
+        "G9",
+        "G10"
+      ],
+      "astronaut_at": "F9",
+      "status": "pending"
+    },
+    {
+      "id": 3,
+      "zone": [
+        "A8",
+        "A9",
+        "A10",
+        "B8",
+        "B9",
+        "B10",
+        "C8",
+        "C9",
+        "C10"
+      ],
+      "astronaut_at": "B9",
+      "status": "pending"
+    }
+  ],
+  "search_zone": [
+    "D5",
+    "D6",
+    "D7",
+    "E5",
+    "E6",
+    "E7",
+    "F5",
+    "F6",
+    "F7"
+  ],
+  "rescued": [],
+  "astronaut": {
+    "at": "E6",
+    "status": "seen"
+  },
+  "tiles": {
+    "A1": {
+      "terrain": "plain"
+    },
+    "A2": {
+      "terrain": "plain"
+    },
+    "A3": {
+      "terrain": "plain"
+    },
+    "A4": {
+      "terrain": "plain"
+    },
+    "A5": {
+      "terrain": "rock"
+    },
+    "A6": {
+      "terrain": "plain"
+    },
+    "A7": {
+      "terrain": "plain"
+    },
+    "A8": {
+      "terrain": "plain"
+    },
+    "A9": {
+      "terrain": "plain"
+    },
+    "A10": {
+      "terrain": "plain"
+    },
+    "B1": {
+      "terrain": "plain"
+    },
+    "B2": {
+      "terrain": "plain"
+    },
+    "B3": {
+      "terrain": "plain"
+    },
+    "B4": {
+      "terrain": "plain"
+    },
+    "B5": {
+      "terrain": "rock"
+    },
+    "B6": {
+      "terrain": "plain"
+    },
+    "B7": {
+      "terrain": "plain"
+    },
+    "B8": {
+      "terrain": "plain"
+    },
+    "B9": {
+      "terrain": "plain"
+    },
+    "B10": {
+      "terrain": "rough"
+    },
+    "C1": {
+      "terrain": "plain"
+    },
+    "C2": {
+      "terrain": "plain"
+    },
+    "C3": {
+      "terrain": "plain"
+    },
+    "C4": {
+      "terrain": "plain"
+    },
+    "C5": {
+      "terrain": "plain"
+    },
+    "C6": {
+      "terrain": "rough"
+    },
+    "C7": {
+      "terrain": "plain"
+    },
+    "C8": {
+      "terrain": "rough"
+    },
+    "C9": {
+      "terrain": "rough"
+    },
+    "C10": {
+      "terrain": "rough"
+    },
+    "D1": {
+      "terrain": "plain"
+    },
+    "D2": {
+      "terrain": "plain"
+    },
+    "D3": {
+      "terrain": "plain"
+    },
+    "D4": {
+      "terrain": "rough"
+    },
+    "D5": {
+      "terrain": "plain"
+    },
+    "D6": {
+      "terrain": "plain"
+    },
+    "D7": {
+      "terrain": "plain"
+    },
+    "D8": {
+      "terrain": "rock"
+    },
+    "D9": {
+      "terrain": "rock"
+    },
+    "D10": {
+      "terrain": "plain"
+    },
+    "E1": {
+      "terrain": "plain"
+    },
+    "E2": {
+      "terrain": "rough"
+    },
+    "E3": {
+      "terrain": "plain"
+    },
+    "E4": {
+      "terrain": "rough"
+    },
+    "E5": {
+      "terrain": "plain"
+    },
+    "E6": {
+      "terrain": "plain"
+    },
+    "E7": {
+      "terrain": "plain"
+    },
+    "E8": {
+      "terrain": "plain"
+    },
+    "E9": {
+      "terrain": "rough"
+    },
+    "E10": {
+      "terrain": "plain"
+    },
+    "F1": {
+      "terrain": "plain"
+    },
+    "F2": {
+      "terrain": "plain"
+    },
+    "F3": {
+      "terrain": "rough"
+    },
+    "F4": {
+      "terrain": "plain"
+    },
+    "F5": {
+      "terrain": "plain"
+    },
+    "F6": {
+      "terrain": "plain"
+    },
+    "F7": {
+      "terrain": "plain"
+    },
+    "F8": {
+      "terrain": "rough"
+    },
+    "F9": {
+      "terrain": "plain"
+    },
+    "F10": {
+      "terrain": "plain"
+    },
+    "G1": {
+      "terrain": "plain"
+    },
+    "G2": {
+      "terrain": "rough"
+    },
+    "G3": {
+      "terrain": "rock"
+    },
+    "G4": {
+      "terrain": "rough"
+    },
+    "G5": {
+      "terrain": "rock"
+    },
+    "G6": {
+      "terrain": "plain"
+    },
+    "G7": {
+      "terrain": "plain"
+    },
+    "G8": {
+      "terrain": "rough"
+    },
+    "G9": {
+      "terrain": "plain"
+    },
+    "G10": {
+      "terrain": "rough"
+    },
+    "H1": {
+      "terrain": "rock"
+    },
+    "H2": {
+      "terrain": "plain"
+    },
+    "H3": {
+      "terrain": "plain"
+    },
+    "H4": {
+      "terrain": "plain"
+    },
+    "H5": {
+      "terrain": "rough"
+    },
+    "H6": {
+      "terrain": "plain"
+    },
+    "H7": {
+      "terrain": "plain"
+    },
+    "H8": {
+      "terrain": "plain"
+    },
+    "H9": {
+      "terrain": "rock"
+    },
+    "H10": {
+      "terrain": "rough"
+    }
+  },
+  "explored": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "E4",
+    "E5",
+    "E6"
+  ],
+  "units": {
+    "rover-1": {
+      "role": "rover",
+      "at": "D5",
+      "status": "ok",
+      "move_used": true,
+      "scan_used": true
+    },
+    "rover-2": {
+      "role": "rover",
+      "at": "D4",
+      "status": "broken",
+      "move_used": false,
+      "scan_used": false
+    }
+  },
+  "pending": {
+    "ledger": null
+  },
+  "last_ledger_mode": "normal",
+  "notes": [
+    {
+      "sol": 1,
+      "from": "rover-2",
+      "to": "engineer",
+      "text": "broke down at D4 in rough terrain, need a repair"
+    },
+    {
+      "sol": 2,
+      "from": "mission-control",
+      "to": "engineer",
+      "text": "rover-2 is broken at D4, file a repair this sol"
+    },
+    {
+      "sol": 2,
+      "from": "rover-1",
+      "to": "mission-control",
+      "text": "colonist seen at E6, one tile east of me"
+    },
+    {
+      "sol": 2,
+      "from": "rover-2",
+      "to": "engineer",
+      "text": "still broken at D4, cannot move or scan"
+    }
+  ],
+  "applied_log": []
+}

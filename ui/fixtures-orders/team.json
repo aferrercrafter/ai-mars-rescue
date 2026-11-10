@@ -1,0 +1,135 @@
+{
+  "schema": 3,
+  "sol": 4,
+  "outcome": null,
+  "phase": "awaiting-orders",
+  "oxygen_sols": null,
+  "oxygen_max": 12,
+  "base": "A1",
+  "objective": {
+    "current": null,
+    "total": 3,
+    "rescued_count": 1
+  },
+  "search_zone": [],
+  "rescued": [
+    "D5"
+  ],
+  "units": {
+    "rover-1": {
+      "role": "rover",
+      "at": "D5",
+      "status": "ok",
+      "move_used": false,
+      "scan_used": false
+    },
+    "rover-2": {
+      "role": "rover",
+      "at": "D4",
+      "status": "ok",
+      "move_used": false,
+      "scan_used": false
+    }
+  },
+  "tiles": {
+    "A1": {
+      "terrain": "plain"
+    },
+    "A2": {
+      "terrain": "plain"
+    },
+    "A3": {
+      "terrain": "plain"
+    },
+    "B1": {
+      "terrain": "plain"
+    },
+    "B2": {
+      "terrain": "plain"
+    },
+    "B3": {
+      "terrain": "plain"
+    },
+    "B4": {
+      "terrain": "plain"
+    },
+    "C1": {
+      "terrain": "plain"
+    },
+    "C2": {
+      "terrain": "plain"
+    },
+    "C3": {
+      "terrain": "plain"
+    },
+    "C4": {
+      "terrain": "plain"
+    },
+    "C5": {
+      "terrain": "plain"
+    },
+    "C6": {
+      "terrain": "rough"
+    },
+    "D2": {
+      "terrain": "plain"
+    },
+    "D3": {
+      "terrain": "plain"
+    },
+    "D4": {
+      "terrain": "rough"
+    },
+    "D5": {
+      "terrain": "plain"
+    },
+    "D6": {
+      "terrain": "plain"
+    },
+    "E4": {
+      "terrain": "rough"
+    },
+    "E5": {
+      "terrain": "plain"
+    },
+    "E6": {
+      "terrain": "plain"
+    }
+  },
+  "astronaut": {
+    "status": "rescued",
+    "seen_at": "D5",
+    "seen_sol": 2
+  },
+  "pending": {
+    "ledger": null,
+    "repairs": []
+  },
+  "notes": [
+    {
+      "sol": 1,
+      "from": "rover-2",
+      "to": "engineer",
+      "text": "broke down at D4 in rough terrain, need a repair"
+    },
+    {
+      "sol": 2,
+      "from": "mission-control",
+      "to": "engineer",
+      "text": "rover-2 is broken at D4, file a repair this sol"
+    },
+    {
+      "sol": 2,
+      "from": "rover-1",
+      "to": "mission-control",
+      "text": "colonist 1 aboard, picked up at D5"
+    },
+    {
+      "sol": 2,
+      "from": "rover-2",
+      "to": "engineer",
+      "text": "still broken at D4, cannot move or scan"
+    }
+  ],
+  "updated": "2026-09-14T10:18:44"
+}

@@ -1,0 +1,12 @@
+# runtime mission state (regenerate with scripts/prepare_demo.py)
+game/
+# personal permission overrides
+.claude/settings.local.json
+# per-agent persistent memory is a demo feature; keep it OUT of git so every rehearsal starts cold
+.claude/agent-memory/
+__pycache__/
+*.pyc
+# Claude Code local files
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+.venv/

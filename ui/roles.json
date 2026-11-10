@@ -1,0 +1,300 @@
+{
+  "schema": 3,
+  "note": "Authored teaching content for the Roles tab (v3, five roles). Merged at runtime with the live frontmatter from GET /api/agents, which is the source of truth for tools and model. Commands follow docs/SPEC.md §3; file names follow §4. `short` is the one-line description the light page shows; the dark page uses `purpose`.",
+  "roles": [
+    {
+      "role": "rover",
+      "title": "Rover",
+      "icon": "rover",
+      "colour": "#35c2c1",
+      "model": "haiku",
+      "units": [
+        "rover-1",
+        "rover-2"
+      ],
+      "purpose": "Two of them, rover-1 and rover-2: each is spawned fresh every sol with a shell and nothing else, drives up to two tiles, scans, and rescues the astronaut when it is standing on the tile — and when rough terrain breaks it down, a note through the engine is its only way to ask the engineer for help.",
+      "tools": [
+        "Bash"
+      ],
+      "actions": [
+        {
+          "action": "Move",
+          "runs": "Bash · python engine/engine.py act rover-1 move D5",
+          "handled_by": "role_guard.py → log_events.py"
+        },
+        {
+          "action": "Scan",
+          "runs": "Bash · python engine/engine.py act rover-1 scan",
+          "handled_by": "role_guard.py → log_events.py"
+        },
+        {
+          "action": "Rescue",
+          "runs": "Bash · python engine/engine.py act rover-1 rescue",
+          "handled_by": "role_guard.py → log_events.py"
+        }
+      ],
+      "guards": [
+        "protect_truth.py",
+        "role_guard.py",
+        "log_events.py"
+      ],
+      "cannot": [
+        {
+          "what": "Give an order or resolve the sol",
+          "why": "order and resolve are Mission Control's; role_guard.py denies them to a rover"
+        },
+        {
+          "what": "Move or scan while broken",
+          "why": "the engine answers: rover-2 is broken at D4; needs an engineer repair"
+        },
+        {
+          "what": "Leave a note as someone else",
+          "why": "role_guard.py only accepts note <its own unit> …, so it cannot speak for rover-2"
+        },
+        {
+          "what": "Decide what happens after a rescue — the human does (AskUserQuestion)",
+          "why": "a rescue puts the team in phase: awaiting-orders; act, order, note and resolve are all refused until the officer on duty answers continue-mission, rest or abort-mission"
+        }
+      ],
+      "point": "Tools: Bash — one line on the belt. Everything a rover does is one engine command, and its only way to talk is a note.",
+      "short": "Can be spawned more than once. Drives across tiles to explore, scans, and picks up the colonist."
+    },
+    {
+      "role": "engineer",
+      "title": "Engineer",
+      "icon": "engineer",
+      "colour": "#e0824a",
+      "purpose": "Reads the notes and the team state, then drops one repair file per broken rover — it has no shell at all, so a file in game/field/ is its only way to change the world, and a hook validates the file the moment it lands.",
+      "model": "haiku",
+      "tools": [
+        "Read",
+        "Write"
+      ],
+      "actions": [
+        {
+          "action": "Read the notes",
+          "runs": "Read · game/notes.md",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "Check the state",
+          "runs": "Read · game/team.json",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "File a repair",
+          "runs": "Write · game/field/repair-rover-2.json",
+          "handled_by": "validate_build.py → python engine/engine.py field-check"
+        }
+      ],
+      "guards": [
+        "protect_truth.py",
+        "validate_build.py",
+        "log_events.py"
+      ],
+      "cannot": [
+        {
+          "what": "Run an engine command",
+          "why": "its tools: line is Read, Write — there is no Bash on this belt"
+        },
+        {
+          "what": "Repair a rover that is not broken",
+          "why": "field-check rejects the file and validate_build.py deletes it again"
+        },
+        {
+          "what": "Back-date a repair to an earlier sol",
+          "why": "field-check requires sol == the current sol"
+        }
+      ],
+      "point": "No Bash. The engineer changes the world by writing a file where a hook is waiting for it.",
+      "short": "Repairs a broken rover by writing one file. No shell."
+    },
+    {
+      "role": "life-support",
+      "title": "Life Support",
+      "icon": "life-support",
+      "colour": "#4ecb8b",
+      "purpose": "Keeps the oxygen ledger: one file, one word — normal or conserve — and a PostToolUse hook runs the engine command on its behalf, because this role is deliberately denied a shell.",
+      "model": "haiku",
+      "tools": [
+        "Read",
+        "Edit"
+      ],
+      "actions": [
+        {
+          "action": "Read the state",
+          "runs": "Read · game/team.json",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "Set the mode",
+          "runs": "Edit · game/field/oxygen-ledger.md  →  mode: conserve",
+          "handled_by": "apply_oxygen.py → python engine/engine.py apply-ledger"
+        },
+        {
+          "action": "Confirm it was accepted",
+          "runs": "Read · game/field/oxygen-ledger.md",
+          "handled_by": "protect_truth.py → log_events.py"
+        }
+      ],
+      "guards": [
+        "protect_truth.py",
+        "write_scope.py --deny-all (Bash, from its own frontmatter)",
+        "apply_oxygen.py",
+        "log_events.py"
+      ],
+      "cannot": [
+        {
+          "what": "Run any Bash command",
+          "why": "its own agent file wires write_scope.py --deny-all on Bash — this is the red row in the demo"
+        },
+        {
+          "what": "Drive a rover",
+          "why": "role_guard.py: life-support may not run 'act rover-1 move C3'"
+        },
+        {
+          "what": "Conserve two sols in a row",
+          "why": "the engine refuses: conserve mode used last sol; astronaut must breathe"
+        }
+      ],
+      "point": "The deny hook lives inside this agent's own file, not in settings.json — permissions can be per-worker.",
+      "short": "Sets the oxygen mode, normal or conserve, by editing one file. No shell."
+    },
+    {
+      "role": "navigator",
+      "title": "Navigator",
+      "icon": "navigator",
+      "colour": "#c9a227",
+      "purpose": "The only role with a memory: it diffs the tiles explored this sol against what it wrote last time and leaves one to three lessons with coordinates — in its own memory store, which survives /clear, and in game/intel/lessons.md, which the next Mission Control reads.",
+      "model": "haiku",
+      "tools": [
+        "Read",
+        "Write",
+        "Edit"
+      ],
+      "actions": [
+        {
+          "action": "Read the state",
+          "runs": "Read · game/team.json",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "Write the lessons",
+          "runs": "Write · game/intel/lessons.md",
+          "handled_by": "write_scope.py game/intel .claude/agent-memory/navigator"
+        },
+        {
+          "action": "Remember them",
+          "runs": "Write · .claude/agent-memory/navigator/terrain.md",
+          "handled_by": "write_scope.py → memory: project in its frontmatter"
+        }
+      ],
+      "guards": [
+        "protect_truth.py",
+        "write_scope.py",
+        "log_events.py"
+      ],
+      "cannot": [
+        {
+          "what": "Write anywhere else",
+          "why": "write_scope.py in its frontmatter allows game/intel and its own memory directory, nothing more"
+        },
+        {
+          "what": "Move a rover",
+          "why": "no Bash on the belt, and role_guard.py would deny act anyway"
+        },
+        {
+          "what": "Read the answer key",
+          "why": "protect_truth.py refuses game/truth.json for every agent, this session included"
+        }
+      ],
+      "point": "State vs knowledge: the engine remembers where the rovers are, the Navigator remembers what the ground was like.",
+      "short": "Remembers the terrain: writes lessons to its own memory for the next sol."
+    },
+    {
+      "role": "mission-log",
+      "title": "Mission Log",
+      "icon": "mission-log",
+      "colour": "#d98cb3",
+      "purpose": "Writes the sol's dispatch — 60 to 90 words naming the units, the notes and any BLOCKED incident — the one role whose output is written for people rather than for the engine, which is why it runs on Sonnet.",
+      "model": "sonnet",
+      "tools": [
+        "Read",
+        "Write"
+      ],
+      "actions": [
+        {
+          "action": "Read the events",
+          "runs": "Read · game/events.jsonl",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "Read the notes and orders",
+          "runs": "Read · game/notes.md",
+          "handled_by": "protect_truth.py → log_events.py"
+        },
+        {
+          "action": "File the dispatch",
+          "runs": "Write · game/dispatches.md",
+          "handled_by": "write_scope.py game/dispatches.md"
+        }
+      ],
+      "guards": [
+        "protect_truth.py",
+        "write_scope.py",
+        "log_events.py"
+      ],
+      "cannot": [
+        {
+          "what": "Write any other file",
+          "why": "write_scope.py game/dispatches.md — one path, and that is the whole allowlist"
+        },
+        {
+          "what": "Change the mission",
+          "why": "it has no Bash, so it cannot act, order or resolve — it only reports"
+        }
+      ],
+      "point": "Same harness, bigger model: the dispatch is the only artefact a human reads, so this role gets Sonnet.",
+      "short": "Writes the sol's dispatch for people to read. Runs on Sonnet."
+    },
+    {
+      "role": "human",
+      "title": "You",
+      "icon": "human",
+      "colour": "#e8b13c",
+      "model": "no model",
+      "compare_only": true,
+      "purpose": "The officer on duty. Decides after every rescue: continue, rest, or abort.",
+      "tools": [
+        "AskUserQuestion (asked of you)"
+      ],
+      "actions": [
+        {
+          "action": "Answer the sitrep",
+          "runs": "AskUserQuestion · 1 - Continue rescue mission / 2 - Rest and repair / 3 - Abort mission",
+          "handled_by": "log_events.py → kind:\"decision\""
+        },
+        {
+          "action": "Mission Control carries it out",
+          "runs": "Bash · python engine/engine.py continue-mission | rest | abort-mission",
+          "handled_by": "role_guard.py → log_events.py"
+        }
+      ],
+      "guards": [
+        "the engine: act, order, note and resolve are refused while phase = awaiting-orders"
+      ],
+      "cannot": [
+        {
+          "what": "Be skipped",
+          "why": "after a rescue the engine refuses every mutating command until one of the three orders is given"
+        },
+        {
+          "what": "Be decided by the model",
+          "why": "run-sol stops the loop and asks — the answer is logged as kind:\"decision\", from human"
+        }
+      ],
+      "point": "The sixth column is not an agent. A rescue hands control back to the room: the model reports, the human chooses.",
+      "short": "Decides after every rescue: continue, rest, or abort."
+    }
+  ]
+}

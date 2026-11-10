@@ -1,0 +1,45 @@
+{
+  "statusLine": { "type": "command", "command": "python hooks/statusline.py" },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Write|Edit|Grep|Glob|Bash",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/protect_truth.py"] }]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/role_guard.py"] }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|AskUserQuestion",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/log_events.py"] }]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/apply_oxygen.py"] }]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/validate_build.py"] }]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/log_events.py"] }]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/hooks/log_events.py"] }]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/engine/engine.py", "status"] }]
+      }
+    ]
+  }
+}
